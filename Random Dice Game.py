@@ -1,6 +1,7 @@
 from time import sleep
 import random
 import sys
+import os
 
 #COLORS
 RED = '\033[1;31;48m'
@@ -14,12 +15,13 @@ gameNum = 1
 gameOver = False
 counter = 0
 Wager = 100 #starting points
+CURPOINT = 100
+Prediction = 0
 Bet = 0
-CURPOINT = 0
+
+
 
 print(f"\n{BLACK}Running Round #{gameNum}\n{RESET}")
-
-
 
 # the game part
 def wagerscreen():
@@ -27,29 +29,36 @@ def wagerscreen():
     global Prediction
     global CURPOINT
     global counter
-    print(
-        f"\n{LTBLUE}**********/////WELCOME TO KYLE'S GAMBLING ROOM!\\\\\\\\**********{RESET}"
-    )
-    print(
-        f"\n{LTBLUE}**********/////YOU HAVE {Wager} POINTS!\\\\\\\\********{RESET}"
-    )
-    Bet = input(
-        f"\n{LTBLUE}**********/////HOW MUCH DO YOU WANT TO WAGER?\\\\\\\\**********\n{RESET}"
-    )
+    global Bet
+    while startGame == True:
+        print(
+            f"\n{LTBLUE}**********/////WELCOME TO KYLE'S GAMBLING ROOM!\\\\\\\\**********{RESET}"
+        )
+        print(
+            f"\n{LTBLUE}**********/////YOU HAVE {CURPOINT} POINTS!\\\\\\\\********{RESET}"
+        )
+        try:
+            Bet = int(input(
+                f"\n{LTBLUE}**********/////HOW MUCH DO YOU WANT TO WAGER?\\\\\\\\**********\n{RESET}" ))
+            if Bet > 0 and Bet <= CURPOINT:
+                break
+            else:
+                print("\nYou don't have enough points!")
+        except ValueError:
+            print(f"{RED}Invalid Input, Please Enter A Number. {RESET}")
 
-    #remaining points after bet
-    CURPOINT = Wager - int(Bet)
-    Wager = CURPOINT
 
-    Prediction = int(input(
-        f"\n{LTBLUE}**********/////WHAT NUMBER DO YOU THINK WILL COME UP?\\\\\\\\**********\n{RESET}"
-    ))
-
-
-
-#dice roll
-
-#fix this
+    while startGame == True:            
+        try:
+            Prediction = int(input(
+                f"\n{LTBLUE}**********/////WHAT NUMBER DO YOU THINK WILL COME UP?\\\\\\\\**********\n{RESET}"
+            ))
+            if Prediction > 0:
+                break
+            else:
+                print("\nInvalid Prediciton... The Prediction must be positive!")
+        except ValueError:
+            print(f"{RED}Invalid Input, Please Enter A Number. {RESET}")
 
 
 counter = 0
@@ -68,12 +77,13 @@ def game():
     global gameNum
     global Bet
     global gameOver
+    global Prediction
     counter = 0
     while True:
         dice1, dice2 = diceRoll()
         if dice1 != dice2:
             print(f"\n{RED} Dice #1: {dice1} \n Dice #2: {dice2} {RESET}")
-            sleep(1)
+            sleep(0.2)
             print(f"\n{BLACK} Re-rolling... {RESET}")
             counter += 1
         else:
@@ -85,26 +95,27 @@ def game():
     if Prediction != counter:
         print(f"\n{RED}You guessed: {Prediction} Doulbes were in {counter} rolls.")
         print(f"\n{RED}You lost {Bet} points!{RESET}")
+        CURPOINT -= Bet
         print(f"\n{RED}You now have {CURPOINT} points!{RESET}")
     else:
         print(f"\n{GREEN}You Guessed Correctly!{RESET}")
-        Wager *= 1.5
-        print(f"\n{GREEN}You won {Wager} points!{RESET}")
+        CURPOINT += int(Bet * 1.5)
+        print(f"\n{GREEN}You won {Bet} points!{RESET}")
 
-        return Wager
-    
+
     if CURPOINT <=  0:
+        os.system('clear')
         print(f"{RED}\n\nYou've Ran Out of Points!\n\nYou've Lost the Game!\n")
         sys.exit()
-        
-        
-        
+
+
 
 #play again & error trapping
 def replay():
         global gameNum
         global gameOver
         global counter
+    
         while True:
             again = input(
                 '\n Would you like to play again? (enter `y` or `n`): ')
@@ -115,22 +126,26 @@ def replay():
 
         if again == 'n':
             gameOver = True
+            print(f"\n\n{GREEN}Thanks for playing{RESET}")
+            sys.exit()
 
-        if again == 'y':
+        elif again == 'y':
             gameNum += 1
             counter = 0
+            os.system('clear')
             wagerscreen()
             game()
             replay()
 
 
-            
 
-        gameNum += 1
-
-        print(f"\n{BLACK}Thanks for playing!{RESET}")
-
-wagerscreen()
-game()
-replay()
-
+startGame = input(f"{LTBLUE}Would you like to play? (enter `y` or `n`): {RESET}")
+if startGame == 'y':
+    startGame = True
+    wagerscreen()
+    game()
+    replay()
+else:
+    startGame = False
+    print(f"\n{RED}Thanks for playing!{RESET}")
+    sys.exit()
