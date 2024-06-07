@@ -2,29 +2,120 @@
 #4/5/24
 #Pupose: To create a program that will allow you to play the card game war against an AI
 
+#06/02/2024 - Fixing up the code:
+#Current issues with code
+#👎 All attached files properly named (including name & project description)
+#👎 Flowchart
+#Coding style: - Good code but some inefficiencies or potential improvements
+#Use of arrays - Adequate
+#👎 All inputs error trapped appropriately
+#👎 name/date/purpose at top
+#Your mark could improve if you make some or all of the following improvements: - Error trap all inputs (within separate loops) - Fully document all aspects of your code - see feedback above - Fix the errors in the program
+#
+#Does not handle ties... so games never end. You do not error trap the variable answer... the game starts if you enter `g`... need a while loop around this
 
-
+#imports
 import random
 import time
 import os
+from tkinter import *
+
+#colours!
 BLACK = '\033[30m'
 RED = '\033[31m'
 GREEN = '\033[32m'
 ORANGE = '\033[33m'
 BLUE = '\033[34m'
-RESET= '\033[0m'
-sleeplen = 1.5
-gameNum = 0
-gameOver = False
+RESET = '\033[0m'
 
-#play again loop as a function (cleanliness)
+
+#fuctions
+def startGame():
+    global p1card, c1card
+    B1.pack_forget()
+
+    cardTotal.set(f"STARTING UP")
+    L4 = Label(root, textvariable=cardTotal)
+    L4.pack(pady=10)
+
+    cardDisplay.set(f"STARTING UP")
+    L2 = Label(root, textvariable=cardDisplay)
+    L2.pack(pady=10)
+
+    winLoseOrTie.set(f"Starting up")
+    L3 = Label(root, textvariable=winLoseOrTie)
+    L3.pack(pady=10)
+
+    def gameRound():
+        global p1card, c1card
+        if isThereAnyCards():
+            return
+        p1card = player.pop(0)
+        c1card = computer.pop(0)
+        compareHands()
+        cardDisplay.set(
+            f"Your card is {p1card} and the computers card is {c1card}")
+        war()
+        ptotal = int(len(player))
+        ctotal = int(len(computer))
+        cardTotal.set(f"PLayers Deck: {ptotal}      Computers Deck: {ctotal}")
+        if not isThereAnyCards():
+            root.after(5, gameRound)
+
+    gameRound()
+
+
+def war():
+    global player_score, computer_score, p1card, c1card
+    if result == 1:
+        player_score += 1
+        player.extend([p1card, c1card])
+        winLoseOrTie.set(f"Player wins the round!")
+
+    elif result == 2:
+        computer_score += 1
+        winLoseOrTie.set(f"Computer wins the round!")
+        computer.extend([p1card, c1card])
+
+    else:
+        isThereATie()
+
+
+def isThereATie():
+    global p1card, c1card, player_score, computer_score, tiePile
+    if result == 0:
+        winLoseOrTie.set("The round was a Tie!")
+        tiePile.append(c1card)
+        tiePile.append(p1card)
+        isThereAnyCards()
+        p1card = player.pop(0)
+        c1card = computer.pop(0)
+        compareHands()
+        cardDisplay.set(
+            f"Your card is {p1card} and the computers card is {c1card}")
+
+        if result == 1:
+            player_score += 1
+            winLoseOrTie.set("Player wins the tie")
+            player.extend(tiePile + [p1card + c1card])
+
+        elif result == 2:
+            computer_score += 1
+            winLoseOrTie.set("Computer wins the tie!")
+            computer.extend(tiePile + [p1card + c1card])
+
+        else:
+            isThereATie()
+
+    root.after(1000, isThereATie)
+
 
 def playAgain():
-    global gameNum
+    global gameNum, gameOver, counter
     while True:
         again = input('\n Would you like to play? (enter `y` or `n`): ')
         if again in ('y', 'n'):
-             break
+            break
         print(f'\n{RED}*** Bad value! Please enter `y` or `n`! ***{RESET}\n')
 
     if again == 'n':
@@ -32,68 +123,6 @@ def playAgain():
         os.system('clear')
         print(f"\n{BLACK}Thanks for playing!{RESET}")
 
-
-    if again == 'y':
-        gameNum += 1
-        counter = 0
-        os.system('clear')
-        print(f"\n{BLACK}Running Round #{gameNum}\n{RESET}")
-        gameOver = False
-
-
-        gameNum += 1
-
-
-# instuctions for game:
-
-#The two players `turn over` the top card of their deck and the player with the higher card `wins` that round and adds one point to their total. The loser subtracts one point from their total.
-
-#If the cards are the same, the round is a tie and neither player gets a point
-
-#The player with the most points after all 26 cards are turned over wins that game
-
-print(f"{BLUE}\n\n/////*****   Welcome to War!   *****/////\n{RESET}")
-
-print(f"{BLUE}\n\n/////*****   How do you play war?   *****/////\n{RESET}")
-print(f"{BLUE}\nWar is a two-player card game where each player reveals the top card of their deck simultaneously. The player with the higher card takes both cards. In case of a tie, players enter a 'war,' placing additional cards face-down before revealing another card. The game continues until one player collects all the cards{RESET}\n")
-
-#play again & error trapping
-
-playAgain()
-
-#deck of cards & variables
-
-
-deck = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 , 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 , 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ]
-
-random.shuffle(deck)
-
-#player 1's deck
-player=deck[:26]
-#player 2's deck
-computer=deck[26:]
-
-#Current Points
-player_score=0
-computer_score=0
-tiePile=[]
-
-#play again loop as a function (cleanliness)
-
-def playAgain():
-    global gameNum
-    while True:
-        again = input('\n Would you like to play? (enter `y` or `n`): ')
-        if again in ('y', 'n'):
-             break
-        print(f'\n{RED}*** Bad value! Please enter `y` or `n`! ***{RESET}\n')
-
-    if again == 'n':
-        gameOver = True
-        os.system('clear')
-        print(f"\n{BLACK}Thanks for playing!{RESET}")
-
-
     if again == 'y':
         gameNum += 1
         counter = 0
@@ -101,102 +130,68 @@ def playAgain():
         print(f"\n{BLACK}Running Round #{gameNum}\n{RESET}")
 
 
-        gameNum += 1
-
-#win, lose, or tie
-def compareHands(player, computer):
-    if p1card > c1card:
+def compareHands():
+    global p1card, c1card, result
+    if int(p1card) > int(c1card):
         result = 1
-    if p1card < c1card:
-        result = -1
+    elif int(p1card) < int(c1card):
+        result = 2
     else:
         result = 0
-    return result
 
-#check for cards left
 
 def isThereAnyCards():
     global computer
     global player
     global gameOver
-    
+
     if len(player) == 0:
-        print(f"\n{BLACK}Player has no cards left!{RESET}")
-        print(f"{RED}\n\n**** -DEFEAT- COMPUTER WINS ****\n\n{RESET}")
+        cardDisplay.set(f"Player has no cards left!")
+        winLoseOrTie.set(f"**** -DEFEAT- COMPUTER WINS ****")
         playAgain()
-        
+
         return True
 
     if len(computer) == 0:
-        print(f"\n{BLACK}Computer has no cards left!{RESET}")
-        print(f"{GREEN}\n\n**** CONGRATULATIONS YOU WIN  ****\n\n{RESET}")
+        cardDisplay.set(f"Computer has no cards left!")
+        winLoseOrTie.set(f"**** CONGRATULATIONS YOU WIN  ****")
         playAgain()
         return True
 
     return False
 
-#While loop (basically the whole game)
-while gameOver == False:
 
-    isThereAnyCards()
-    p1card = player.pop(0)
-    c1card = computer.pop(0)
+#root and window
+root = Tk()
+root.title("WAR! - Kyle Button")
+root.geometry("500x500")
 
-    print(f"{BLUE}  ///*** CURRENT ROUND: {computer_score+player_score} ***///   {RESET}")
-    
+#deck of cards & variables
+deck = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    11, 12, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1, 2, 3, 4, 5, 6, 7,
+    8, 9, 10, 11, 12, 13
+]
+random.shuffle(deck)
+player = deck[:26]
+computer = deck[26:]
+player_score = 0
+computer_score = 0
+tiePile = []
+sleeplen = 1.5
+gameNum = 0
+result = 0
+gameOver = False
+cardDisplay = StringVar()
+winLoseOrTie = StringVar()
+cardTotal = StringVar()
 
-    if compareHands(p1card, c1card) == 1:
-        player_score += 1
-        print(f"{GREEN}\nPlayer wins the round!{RESET}")
-        player.append(p1card)
-        player.append(c1card)
+#visuals !!!! lets do this !!!!!
+L1 = Label(root, text="Welcome to War! \n")
+B1 = Button(root, text="Click to get started", command=startGame)
 
+#placements
+L1.pack(pady=25)
+B1.pack(pady=10)
 
-    elif compareHands(p1card, c1card) == -1:
-        computer_score += 1
-        print(f"{RED}\nComputer wins the round!{RESET}")
-        computer.append(p1card)
-        computer.append(c1card)
-
-    while compareHands(p1card, c1card) == 0:
-        print("\nThe round was a Tie!")
-        tie = True
-        tiePile = []
-        while tie == True:
-            tiePile.append(c1card)
-            tiePile.append(p1card)
-            isThereAnyCards()
-            p1card = player.pop(0)
-            c1card = computer.pop(0)
-            print(f"{BLUE}")
-            print(p1card, c1card)
-            if compareHands(p1card, c1card) == 1:
-                player_score += 1
-                print(f"{GREEN}\n     Player wins the tie{RESET}")
-                player.extend(tiePile)
-                player.append(c1card)
-                player.append(p1card)
-                break
-                
-            elif compareHands(p1card, c1card) == -1:
-                computer_score += 1
-                print(f"{RED}\n     Computer wins the tie!{RESET}")
-                computer.extend(tiePile)
-                computer.append(c1card)
-                computer.append(p1card)
-                break
-
-
-            elif len(player) == 0 or len(computer) == 0:
-                tie = False
-                break
-
-    print(f"{GREEN}\n\nPlayer's Card: {p1card}{RESET}       {RED}Computer's Card: {c1card}{RESET}")
-                
-    print(f"\n\nPlayer's Deck: {len(player)}{RESET}       Computer's Deck: {len(computer)}{RESET}")
-        
-    time.sleep(sleeplen)
-
-    print(f"\n{BLUE}    *****Drawing next card*****    {RESET}")
-
-    os.system('clear')
+root.mainloop()
