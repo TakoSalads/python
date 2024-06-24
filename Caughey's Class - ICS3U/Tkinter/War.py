@@ -201,3 +201,5 @@ B1 = Button(root, text="Click to get started", command=startGame)
 #placements
 L1.pack(pady=25)
 B1.pack(pady=10)
+
+root.mainloop()
