@@ -1,6 +1,6 @@
 #Kyle Button
 #08/20/24
-#Purpose: conversion to CAD, USD, JYEN, GBP, KOR and calculator with AMDS
+#Purpose: conversion to CAD, USD, JYEN, KOR and calculator with AMDS
 
 from tkinter import *
 
@@ -16,22 +16,22 @@ def convertor():
 def usdtocad():
     try:
         tobe = float(Entry1.get())
-        Total = tobe * 0.73
+        Total = tobe * 1.36
 
         Answer.config(text=f"USD to CAD: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 def usdtoyen():
     try:
         tobe = float(Entry1.get())
-        Total = tobe * 0.0069
+        Total = tobe * 146
 
         Answer.config(text=f"USD to Japanese Yen: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 def usdtoEuro():
     try:
@@ -41,17 +41,17 @@ def usdtoEuro():
         Answer.config(text=f"USD to Euro: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 def usdtoWon():
     try:
         tobe = float(Entry1.get())
-        Total = tobe * 0.00075
+        Total = tobe * 1332
 
         Answer.config(text=f"USD to Chinese Won: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 
 #calcultor ---
@@ -65,7 +65,7 @@ def add():
         Answer.config(text=f"Total: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
     
 def subtract():
     try:
@@ -76,7 +76,7 @@ def subtract():
         Answer.config(text=f"Total: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 def multiply():
     try:
@@ -87,7 +87,7 @@ def multiply():
         Answer.config(text=f"Total: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 def divide():
     try:
@@ -98,14 +98,14 @@ def divide():
         Answer.config(text=f"Total: {Total}")
 
     except ValueError:
-        print("Invalid Input")
+        Answer.config(text=f"Invalid Input")
 
 
 #varibles
 
 root = Tk()
 root.title("Currency Converter & Calculator")
-root.geometry("600x500")
+root.geometry("275x200")
 
 
 #visuals
@@ -132,11 +132,11 @@ Button3.grid(row=4, column=1)
 Button4.grid(row=5, column=1)
 Entry1.grid(row=2, column=2)
 Entry2.grid(row=3, column=2)
-Answer.grid(row=4, column=2, pady=20)
+Answer.grid(row=4, column=2)
 Button5.grid(row=2, column=3)
-Button5.grid(row=3, column=3)
-Button5.grid(row=4, column=3)
-Button5.grid(row=5, column=3)
+Button6.grid(row=3, column=3)
+Button7.grid(row=4, column=3)
+Button8.grid(row=5, column=3)
 
 
 
