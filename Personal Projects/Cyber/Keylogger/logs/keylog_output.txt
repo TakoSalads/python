@@ -1,0 +1,56 @@
+hello
+i
+ma
+ky
+Detected: password<Key.enter>
+Detected: passwordhi
+i
+am
+kyle
+my
+Detected: passwordis
+fortnite
+1
+2
+3
+<Key.ctrl>
+hello
+i
+ma
+am
+<Key.shift>
+Ktlw
+yle
+b
+<Key.shift>
+Button
+mt
+y
+Detected: passwordis
+final
+fantasy
+and
+<Key.shift>
+I
+love
+the
+game
+Detected: fortnite<Key.enter>
+hello
+it
+sucks
+f
+i
+likem
+moneky
+Detected: fortnitehi
+n
+<Key.media_volume_up>
+d
+<Key.shift>
+<Key.shift>
+}\n
+<Key.right>
+<Key.cmd>
+s
+<Key.ctrl>
