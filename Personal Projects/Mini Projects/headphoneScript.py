@@ -16,7 +16,7 @@ def set_default_audio_device(device_name):
     devices = AudioUtilities.GetAllDevices()
     for device in devices:
         if device.FriendlyName == device_name:
-            device.Activate(IID_IAudioEndpointVolume, CLSCTX_ALL, None)
+            device.Activate(CLSCTX_ALL, None)
             break
 
 # Helper function to read the current device from a file

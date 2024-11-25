@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Personal Finance Management</h1>
+    </header>
+    <main>
+        <section id="budget-section">
+            <h2>Budgets</h2>
+            <ul id="budget-list">
+                {% for budget in budgets %}
+                    <li>{{ budget.name }}: ${{ budget.amount }}</li>
+                {% endfor %}
+            </ul>
+            <form action="{{ url_for('add_budget') }}" method="post">
+                <input type="text" name="name" placeholder="Budget name" required>
+                <input type="number" name="amount" placeholder="Amount" required>
+                <button type="submit">Add Budget</button>
+            </form>
+        </section>
+        <section id="expense-section">
+            <h2>Expenses</h2>
+            <ul id="expense-list">
+                {% for expense in expenses %}
+                    <li>{{ expense.name }}: ${{ expense.amount }}</li>
+                {% endfor %}
+            </ul>
+            <form action="{{ url_for('add_expense') }}" method="post">
+                <input type="text" name="name" placeholder="Expense name" required>
+                <input type="number" name="amount" placeholder="Amount" required>
+                <button type="submit">Add Expense</button>
+            </form>
+        </section>
+        <section id="chart">
+          <div>
+            <canvas id="myChart"></canvas>
+          </div>
+          
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          
+          <script>
+            const ctx = document.getElementById('myChart');
+          
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [12, 19, 3, 5, 2, 3],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          </script>
+        </section>
+    </main>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
