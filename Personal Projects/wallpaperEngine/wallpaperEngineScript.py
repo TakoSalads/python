@@ -6,7 +6,11 @@ import time
 API_KEY = "cd962cd17b8a10ee739f170cd13cda5b"
 LOCATION = "Ottawa"
 WEATHER_URL = f"http://api.openweathermap.org/data/2.5/weather?q={LOCATION}&appid={API_KEY}"
-
+GREEN = '\033[32m'
+RED = '\033[31m'
+LTBLUE = '\033[94m'
+RESET= '\033[0m'
+current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
 def get_weather():
     try:    
@@ -37,15 +41,15 @@ def trigger_macro(temperature, condition):
         return
 
     if temperature < 0 and condition != "clouds":
-        print(f"Temperature is below 0°C: {temperature}°C. Triggering 'snowy' macro.")
+        print(f"           Triggering 'snowy' macro.")
         keyboard.press_and_release("ctrl+alt+down")  # Snowy macro
         return
     elif temperature < 5 and condition == "clouds":
-        print(f"Temperature is below 5°C: {temperature}°C and condition is {condition}. Triggering 'cloudy-cold' macro.")
+        print(f"           Triggering 'cloudy-cold' macro.")
         keyboard.press_and_release("alt+5")  # Cloudy-cold macro
         return
     elif temperature > 5 and condition == "clouds":
-        print(f"Temperature is {temperature}°C and condition is {condition}. Triggering 'cloudy' macro.")
+        print(f"           Triggering 'cloudy' macro.")
         keyboard.press_and_release("ctrl+alt+home")  # Cloudy macro
         return
     else:
@@ -60,12 +64,13 @@ if __name__ == "__main__":
     while True:
         weather, temp = get_weather()
         if weather and temp is not None:
-            print(f"Fetched Weather: {weather}, Temperature: {temp:.2f}°C")
+            print(f"            | The time is {current_time} |       ")
+            print(f"{GREEN}| Fetched Weather: {weather}, Temperature: {temp:.2f}°C |   {RESET}")
             trigger_macro(temp, weather)
         else:
-            print("Failed to fetch weather, retrying in an hour!")
+            print(f"{RED}      | Failed to fetch weather, retrying in an hour! |    {RESET}")
             
-        print("Waiting for an hour!")
+        print(f"{LTBLUE}           | Update Successful - Updating Hourly |      {RESET}")   
         time.sleep(3600)
 
 
