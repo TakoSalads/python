@@ -1,2 +1,5 @@
-rain = Ctrl + Alt + End
-snow = Ctrl + Alt + Down
+"rain": ["ctrl", "alt", "end"],
+"snow": ["ctrl", "alt", "down"],
+"default": ["ctrl", "alt", "insert"],
+"clouds": ["ctrl", "alt", "home"],
+"clouds-cold": ["ctrl", "alt", "-"]

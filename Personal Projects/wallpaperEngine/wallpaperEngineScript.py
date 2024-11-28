@@ -1,5 +1,5 @@
 import requests
-import pyautogui
+import keyboard
 import time
 
 
@@ -23,24 +23,37 @@ def get_weather():
         return None, None 
 
 MACROS = {
-    "rain": ["ctrl", "alt", "end"],
-    "snow": ["ctrl", "alt", "down"],
-    "default": ["ctrl", "alt", "insert"],
-    "clouds": ["ctrl", "alt", "home"]
+    "drizzle": "ctrl+alt+end",
+    "rain": "ctrl+alt+end",
+    "snow": "ctrl+alt+down",
+    "clear": "ctrl+alt+insert",
+    "clouds": "ctrl+alt+home",
+    "clouds-cold": "alt+5"
 }
 
 def trigger_macro(temperature, condition):
     if temperature is None or condition is None:
         print("Skipping Macro due to missing weather data")
+        return
 
-    if temperature < 0:
+    if temperature < 0 and condition != "clouds":
         print(f"Temperature is below 0°C: {temperature}°C. Triggering 'snowy' macro.")
-        pyautogui.hotkey("ctrl", "alt", "down")  # Snowy macro
+        keyboard.press_and_release("ctrl+alt+down")  # Snowy macro
+        return
+    elif temperature < 5 and condition == "clouds":
+        print(f"Temperature is below 5°C: {temperature}°C and condition is {condition}. Triggering 'cloudy-cold' macro.")
+        keyboard.press_and_release("alt+5")  # Cloudy-cold macro
+        return
+    elif temperature > 5 and condition == "clouds":
+        print(f"Temperature is {temperature}°C and condition is {condition}. Triggering 'cloudy' macro.")
+        keyboard.press_and_release("ctrl+alt+home")  # Cloudy macro
+        return
     else:
         # Use weather condition to determine the macro
-        keys = MACROS.get(condition, MACROS["default"])
+        keys = MACROS.get(condition, "ctrl+alt+insert")
         print(f"Weather: {condition}, Temperature: {temperature}°C. Triggering macro.")
-        pyautogui.hotkey(*keys)
+        keyboard.press_and_release(*keys)
+
 
 #main
 if __name__ == "__main__":
@@ -50,9 +63,9 @@ if __name__ == "__main__":
             print(f"Fetched Weather: {weather}, Temperature: {temp:.2f}°C")
             trigger_macro(temp, weather)
         else:
-            print("Failed to fetch weather, retrying in an hour")
+            print("Failed to fetch weather, retrying in an hour!")
             
-        print("Waiting for one hour")
+        print("Waiting for an hour!")
         time.sleep(3600)
 
 
