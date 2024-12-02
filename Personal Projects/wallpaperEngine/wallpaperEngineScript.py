@@ -4,7 +4,7 @@ import time
 
 
 API_KEY = "cd962cd17b8a10ee739f170cd13cda5b"
-LOCATION = "Ottawa"
+LOCATION = "Bells Corners"
 WEATHER_URL = f"http://api.openweathermap.org/data/2.5/weather?q={LOCATION}&appid={API_KEY}"
 
 def get_weather():
@@ -58,7 +58,7 @@ if __name__ == "__main__":
                 condition = "snow"
                 print(f"         Triggering 'snowy' macro.")
             elif weather == "clouds" and temp < 5:
-                condition = "clouds_cold"
+                condition = "clouds-cold"
                 print(f"         Triggering 'clouds-cold' macro.")
             else:
                 condition = weather
@@ -67,7 +67,7 @@ if __name__ == "__main__":
                 if condition in MACROS:
                     press_macro(condition)
                 else:
-                    print("No macro found for condition: {condition}")
+                    print(f"No macro found for condition: {condition}")
                 last_condition = condition
         else:
             print(f"     | Failed to fetch weather, retrying in an hour! |")  
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         # Timer with countdown
         print(f"     | Update Successful - Updating Hourly |")   
         for i in range(60):  # 60 minutes
-            print(f"{60 - i} minutes remaining...")
+            print(f"          {60 - i} minutes remaining...")
             time.sleep(60)
 
 
