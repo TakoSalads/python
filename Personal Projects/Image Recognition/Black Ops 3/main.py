@@ -5,14 +5,14 @@ import time
 import pytesseract
 
 #tesseract path location (if your pc corrupted FUCK YOU!)
-pytesseract.pytesseract.tesseract_cmd = r'C:\Users\sassy\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\Scripts\pytesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 killCount = 0
 lastDetectionTime = 0
 cd = 0.5
 
 #not the actual coords
-monitor = {"top": 200, "left": 500, "width": 150, "height": 50}
+coords = {"top": 736, "left": 157, "width": 217, "height": 200}
 
 
 def preprocessImg(image):
@@ -27,9 +27,11 @@ with mss.mss() as sct:
     try:
         while True:
             #capture screen
-            img = np.array(sct.grab(monitor))
+            #monitor = sct.monitors[2]
+            screenshot = sct.grab(coords)
+            img = np.array(screenshot)
 
-            processedImg(img) = preprocessImg(img)
+            processedImg = preprocessImg(img)
 
             # Perform OCR to extract text - Also known as "WTF does this mean"
             custom_config = r'--oem 3 --psm 7 -c tessedit_char_whitelist=+0123456789'
@@ -37,7 +39,7 @@ with mss.mss() as sct:
 
             #scan for "+50" or "+10" or "+100"
             currentTime = time.time()
-            if "+50" in text or "+10" in text or "+100" or "+60" in text:
+            if any(value in text for value in ["+50", "+100", "+60"]):
                 #should I scan?
                 if currentTime - lastDetectionTime > cd:
                     #yes!
