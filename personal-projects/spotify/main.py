@@ -1,4 +1,4 @@
-#tako - 26/02/2025 
+#tako - 25/02/2025 
 #project goals:
 # * access the spotify user data by using spotipy.
 # * create a playlist based on previous listening data (multiple based on varible timings.)
@@ -8,6 +8,14 @@
 # * full tkinter gui
 # * passive playlist updates
 # * take in multiple sets of data (current listening, playlist relation, spotify mix related to current listening)
+#
+#tako - 27/02/2025
+#current build
+# * project goals complete besides save-points (not enough listening data currently)
+# * playlist limit set to 50, appends newest listen removes oldest.
+# * updates automatically upon program launch.
+# * uses flask & bootstrap instead of tkinter - dynamic updates & clean interface
+
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -27,9 +35,9 @@ scopes = [
     "playlist-read-private"
 ]
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,      # Both require setting up
-                                               client_secret=client_secret,  # spotify developer
-                                               redirect_uri=redirect_uri,
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,      # clients require setting up
+                                               client_secret=client_secret,  # spotify developer &    - tako
+                                               redirect_uri=redirect_uri,  #  modifying the .env file 
                                                scope=" ".join(scopes)))
 
 #playlist ID
@@ -68,14 +76,33 @@ def add_items():
 
         if new_tracks:
             sp.playlist_add_items(playlist_id=playlist_id, items=noDupe)
-            print(f"Added {len(noDupe)} tracks to the playlist!")
+            print(f"Added {len(new_tracks)} tracks to the playlist!")
+
+            playlist_organize(new_tracks)
         else:
             print("No new tracks to add.")
     else:
         print("GFYS")
 
-        
+def playlist_organize(new_tracks):
+    max_songs = 50
 
+    existing_tracks = sp.playlist_tracks(playlist_id=playlist_id)["items"]
+    current_tracks = [item["track"]["uri"] for item in existing_tracks]
+
+    all_tracks = current_tracks + new_tracks
+
+    if len(all_tracks) > max_songs:
+        tracks_remove = len(all_tracks) - max_songs
+        tracks_remove_uris = all_tracks[:tracks_remove]
+
+        sp.playlist_remove_all_occurrences_of_items(playlist_id, tracks_remove_uris)
+        print(f"Removed {tracks_remove} tracks to keep playlist within limit.")
+
+    else:
+        print("Playlist within parameters.")
+
+        
 
 get_current_track()
 get_recent()

@@ -1,0 +1,40 @@
+<!--27/02/2025 - tako-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ playlist.name }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-dark text-white">
+
+    <div class="container mt-4">
+        <div class="text-center">
+            {% if playlist.image %}
+                <img src="{{ playlist.image }}" alt="Playlist Cover" class="img-fluid rounded" style="max-width: 300px;">
+            {% endif %}
+            <h1 class="mt-3">{{ playlist.name }}</h1>
+            <p class="text-muted">{{ playlist.description }}</p>
+        </div>
+
+        <div class="mt-4">
+            <h3>Tracks</h3>
+            <ul class="list-group">
+                {% for track in playlist.tracks %}
+                    <li class="list-group-item bg-secondary text-white d-flex align-items-center">
+                        {% if track.cover %}
+                            <img src="{{ track.cover }}" alt="Album Cover" class="me-3" style="width: 50px; height: 50px; border-radius: 5px;">
+                        {% endif %}
+                        <div>
+                            <strong>{{ track.name }}</strong> <br>
+                            <small>{{ track.artist }} - {{ track.album }}</small>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
