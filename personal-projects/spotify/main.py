@@ -75,7 +75,7 @@ def add_items():
         new_tracks = [track for track in noDupe if track not in existing_urls]
 
         if new_tracks:
-            sp.playlist_add_items(playlist_id=playlist_id, items=noDupe)
+            sp.playlist_add_items(playlist_id=playlist_id, items=new_tracks)
             print(f"Added {len(new_tracks)} tracks to the playlist!")
 
             playlist_organize(new_tracks)
