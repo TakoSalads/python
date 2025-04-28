@@ -14,6 +14,7 @@ redirect_uri = os.getenv("SPOTIFY_REDIRECT_URI")
 scopes = [
     "user-read-currently-playing",
     "user-read-recently-played",
+    "playlist-modify-public",
     "playlist-modify-private",
     "playlist-read-private"
 ]
