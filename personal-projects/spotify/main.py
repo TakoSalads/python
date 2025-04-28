@@ -3,6 +3,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import os
 import time
+import json
 
 # Load environment variables
 load_dotenv()
@@ -16,7 +17,8 @@ scopes = [
     "user-read-recently-played",
     "playlist-modify-public",
     "playlist-modify-private",
-    "playlist-read-private"
+    "playlist-read-private",
+    "playlist-read-public"
 ]
 
 # Set up Spotify client
@@ -95,6 +97,9 @@ def add_items():
     if new_tracks:
         safe_spotify_call(sp.playlist_add_items, playlist_id, new_tracks, position=0)
         print(f"Added {len(new_tracks)} new tracks to the playlist!")
+        #<---- update to raspberry's log folder pre run ---->#
+        with open('logs/recentlylistened.json', 'w') as f:
+            json.dump(new_tracks, f)
 
     # Ensure playlist is exactly 50 songs
     playlist_organize()

@@ -3,6 +3,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import os
 import time
+import json
 
 # Load environment variables
 load_dotenv()
@@ -25,6 +26,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                scope=" ".join(scopes)))
 
 playlist_id = 'https://open.spotify.com/playlist/0m2CspvZYTfqiEjvzGxhkW'
+playlist_id_recently_listened = "0uqbFM1bOiBWQhxcBOSKyk"
 
 
 # Track storage
@@ -42,7 +44,14 @@ def safe_spotify_call(func, *args, **kwargs):
     print("Max retries reached, skipping operation.")
     return None
 
-()
+
+def get_current_counts():
+    with open('logs/recentlylistened.json', 'r') as f:
+ 
+            
+
+
+
 
 #idea:
 #take the each song added to recently-listened, assign a digit each time it appears, having the 50 most appearing
